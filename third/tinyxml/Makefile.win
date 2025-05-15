@@ -1,0 +1,26 @@
+CC := g++
+AR :=ar
+ARFLAGS := rcs
+CP := xcopy /y
+BIN_PATH := ../../bin
+LIB_PATH := ../../lib 
+INC_PATH := ../../include 
+
+CFLAGS  := -ggdb3 -Wall -O2 -static -fPIC -I../include  
+LDFLAGS := -lpthread
+
+TARGET	:= libtinyxml.lib
+SRCS    := $(wildcard *.cpp)
+OBJS    := $(SRCS:%.cpp=%.o)
+
+.PHONY: clean all
+
+$(TARGET): $(OBJS)
+	$(AR) ${ARFLAGS} $@ $^
+	$(CP) *.h "$(INC_PATH)"
+	$(CP) $(TARGET) "$(LIB_PATH)"
+%.o:%.cpp
+	$(CC)  -o $@ -c $< ${CFLAGS}
+
+clean:
+	del /Q ${OBJS} ${TARGET}
