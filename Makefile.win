@@ -1,0 +1,28 @@
+AR := ar
+CC := g++
+STRIP := strip
+
+CP := @cp -f -u
+RM := @rm -f
+
+LIB_PATH := ./lib
+
+ARFLAGS := rcu
+CFLAGS  := -ggdb3 -Wall -O2 -shared -fPIC -D__LIBDBUS_LIBRARY__ -I. -I/usr/include
+LDFLAGS := -L./lib -L./lib/libtinyxml.lib -L. -lpthread
+
+TARGET	:= dbus.dll
+SRCS    := $(wildcard *.cpp )
+OBJS    := $(SRCS:%.cpp=%.o)
+
+.PHONY: clean all
+
+$(TARGET): $(OBJS)
+	$(CC) ${CFLAGS} -o $@ $(OBJS) ${LDFLAGS}
+
+%.o:%.cpp
+	$(CC) -o $@ -c $< ${CFLAGS}
+
+clean:
+	del /Q $(OBJS) $(TARGET)
+
